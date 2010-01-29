@@ -1,11 +1,9 @@
 /*
- * woobie.c -- part of woobie.mod
- *   nonsensical command to exemplify module programming
+ * lua.c -- part of lua.mod
+ *   Lua scripting support for eggdrop 1.6
  *
- * Originally written by ButchBub         15 July     1997
- * Comments by Fabian Knittel             29 December 1999
+ * Written by Toni Spets
  *
- * $Id: woobie.c,v 1.27 2008-02-16 21:41:11 guppy Exp $
  */
 /*
  * Copyright (C) 1999 - 2008 Eggheads Development Team
@@ -25,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#define MODULE_NAME "woobie"
+#define MODULE_NAME "lua"
 #define MAKING_WOOBIE
 
 #include "src/mod/module.h"

@@ -1,6 +1,3 @@
-# Makefile for src/mod/woobie.mod/
-# $Id: Makefile,v 1.14 2005-12-09 09:29:12 wcc Exp $
-
 srcdir = .
 
 
@@ -10,21 +7,21 @@ doofus:
 	@echo ""
 	@cd ../../../ && make
 
-static: ../woobie.o
+static: ../lua.o
 
-modules: ../../../woobie.$(MOD_EXT)
+modules: ../../../lua.$(MOD_EXT)
 
-../woobie.o:
-	$(CC) $(CFLAGS) $(CPPFLAGS) -DMAKING_MODS -c $(srcdir)/woobie.c
-	@rm -f ../woobie.o
-	mv woobie.o ../
+../lua.o:
+	$(CC) $(CFLAGS) $(CPPFLAGS) -DMAKING_MODS -c $(srcdir)/lua.c
+	@rm -f ../lua.o
+	mv lua.o ../
 
-../../../woobie.$(MOD_EXT): ../woobie.o
-	$(LD) -o ../../../woobie.$(MOD_EXT) ../woobie.o $(XLIBS) $(MODULE_XLIBS)
-	$(STRIP) ../../../woobie.$(MOD_EXT)
+../../../lua.$(MOD_EXT): ../lua.o
+	$(LD) -o ../../../lua.$(MOD_EXT) ../lua.o $(XLIBS) $(MODULE_XLIBS)
+	$(STRIP) ../../../lua.$(MOD_EXT)
 
 depend:
-	$(CC) $(CFLAGS) -MM $(srcdir)/woobie.c -MT ../woobie.o > .depend
+	$(CC) $(CFLAGS) -MM $(srcdir)/lua.c -MT ../lua.o > .depend
 
 clean:
 	@rm -f .depend *.o *.$(MOD_EXT) *~
@@ -32,7 +29,7 @@ clean:
 distclean: clean
 
 #safety hash
-../woobie.o: ./woobie.c ../../../src/mod/module.h ../../../src/main.h \
+../lua.o: ./lua.c ../../../src/mod/module.h ../../../src/main.h \
   ../../../config.h ../../../lush.h ../../../src/lang.h \
   ../../../src/eggdrop.h ../../../src/flags.h ../../../src/cmdt.h \
   ../../../src/tclegg.h ../../../src/tclhash.h ../../../src/chan.h \
