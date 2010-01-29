@@ -13,7 +13,7 @@ static: ../egglua.o
 
 modules: ../../../egglua.$(MOD_EXT)
 
-../egglua.o:
+../egglua.o: commands.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -DMAKING_MODS -c $(srcdir)/egglua.c
 	@rm -f ../egglua.o
 	mv egglua.o ../
@@ -31,7 +31,7 @@ clean:
 distclean: clean
 
 #safety hash
-../egglua.o: ./egglua.c ../../../src/mod/module.h ../../../src/main.h \
+../egglua.o: ./egglua.c ./commands.c ../../../src/mod/module.h ../../../src/main.h \
   ../../../config.h ../../../lush.h ../../../src/lang.h \
   ../../../src/eggdrop.h ../../../src/flags.h ../../../src/cmdt.h \
   ../../../src/tclegg.h ../../../src/tclhash.h ../../../src/chan.h \
