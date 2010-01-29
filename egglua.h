@@ -1,4 +1,6 @@
-#include "src/mod/module.h"
+#include "../module.h"
+#include "../irc.mod/irc.h"
+#include "../server.mod/server.h"
 
 #define MODULE_NAME "egglua"
 
@@ -9,15 +11,9 @@
 #include <lua5.1/lauxlib.h>
 
 #undef global
+static Function *global = NULL, *irc_funcs = NULL, *server_funcs = NULL;
 
-Function *global = NULL;
-
-static int cmd_lua(struct userrec *u, int idx, char *par);
-static int cmd_lua_load(struct userrec *u, int idx, char *par);
-static int cmd_lua_unload(struct userrec *u, int idx, char *par);
-
-static int cmd_lua_pubm(char *nick, char *uhost, char *hand, char *channel, char *rest);
-static int cmd_lua_msg(char *nick, char *uhost, char *hand, char *channel, char *rest);
+#include "commands.c"
 
 EXPORT_SCOPE char *egglua_start();
 static char *egglua_close();

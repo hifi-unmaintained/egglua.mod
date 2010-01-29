@@ -26,7 +26,6 @@
 #define MAKING_EGGLUA
 
 #include "egglua.h"
-#include "commands.c"
 
 static Function egglua_table[] = {
     (Function) egglua_start,
@@ -48,7 +47,14 @@ char *egglua_start(Function *global_funcs)
         return "This module requires Eggdrop 1.6.0 or later.";
     }
 
+    if (!(irc_funcs = module_depend(MODULE_NAME, "irc", 1, 0)))
+        return "You need the irc module to use the stats module.";
+    if (!(server_funcs = module_depend(MODULE_NAME, "server", 1, 0)))
+        return "You need the server module to use the stats module.";
+
     add_builtins(H_dcc, lua_dcc);
+    add_builtins(H_pubm, lua_pubm);
+    add_builtins(H_msgm, lua_msg);
     return NULL;
 }
 
@@ -56,6 +62,8 @@ static char *egglua_close()
 {
     Context;
     rem_builtins(H_dcc, lua_dcc);
+    rem_builtins(H_pubm, lua_pubm);
+    rem_builtins(H_msgm, lua_msg);
     module_undepend(MODULE_NAME);
     return NULL;
 }
