@@ -10,10 +10,13 @@
 #include <lua5.1/lualib.h>
 #include <lua5.1/lauxlib.h>
 
+static lua_State *L = NULL;
+
 #undef global
 static Function *global = NULL, *irc_funcs = NULL, *server_funcs = NULL;
 
 #include "commands.c"
+#include "exports.c"
 
 EXPORT_SCOPE char *egglua_start();
 static char *egglua_close();

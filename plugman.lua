@@ -5,17 +5,6 @@ if dprintf == nil then
     end
 end
 
--- dprint special indexes
-DP_STDOUT      = 0x7FF1
-DP_LOG         = 0x7FF2
-DP_SERVER      = 0x7FF3
-DP_HELP        = 0x7FF4
-DP_STDERR      = 0x7FF5
-DP_MODE        = 0x7FF6
-DP_MODE_NEXT   = 0x7FF7
-DP_SERVER_NEXT = 0x7FF8
-DP_HELP_NEXT   = 0x7FF9
-
 local function copy_table(orig)
     local new = {}
 

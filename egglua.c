@@ -40,6 +40,27 @@ char *egglua_start(Function *global_funcs)
 
     Context;
 
+    L = luaL_newstate();
+    luaL_openlibs(L);
+    
+    /* register constants */
+    lua_pushnumber(L, DP_STDOUT);
+    lua_setglobal(L, "DP_STDOUT");
+    lua_pushnumber(L, DP_LOG);
+    lua_setglobal(L, "DP_LOG");
+    lua_pushnumber(L, DP_SERVER);
+    lua_setglobal(L, "DP_SERVER");
+    lua_pushnumber(L, DP_HELP);
+    lua_setglobal(L, "DP_HELP");
+    lua_pushnumber(L, DP_STDERR);
+    lua_setglobal(L, "DP_STDERR");
+    lua_pushnumber(L, DP_MODE);
+    lua_setglobal(L, "DP_MODE");
+
+    /* export some C functions from eggdrop for Lua scripts */
+    lua_pushcfunction(L, egglua_dprintf);
+    lua_setglobal(L, "dprintf");
+
     module_register(MODULE_NAME, egglua_table, 0, 1);
 
     if (!module_depend(MODULE_NAME, "eggdrop", 106, 0)) {
@@ -61,6 +82,7 @@ char *egglua_start(Function *global_funcs)
 static char *egglua_close()
 {
     Context;
+    lua_close(L);
     rem_builtins(H_dcc, lua_dcc);
     rem_builtins(H_pubm, lua_pubm);
     rem_builtins(H_msgm, lua_msg);
