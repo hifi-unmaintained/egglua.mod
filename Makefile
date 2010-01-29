@@ -1,3 +1,4 @@
+LIBLUA = -llua5.1
 srcdir = .
 
 
@@ -7,21 +8,22 @@ doofus:
 	@echo ""
 	@cd ../../../ && make
 
-static: ../lua.o
+static: ../egglua.o
+	@echo "$(LIBLUA)" >> ../mod.xlibs
 
-modules: ../../../lua.$(MOD_EXT)
+modules: ../../../egglua.$(MOD_EXT)
 
-../lua.o:
-	$(CC) $(CFLAGS) $(CPPFLAGS) -DMAKING_MODS -c $(srcdir)/lua.c
-	@rm -f ../lua.o
-	mv lua.o ../
+../egglua.o:
+	$(CC) $(CFLAGS) $(CPPFLAGS) -DMAKING_MODS -c $(srcdir)/egglua.c
+	@rm -f ../egglua.o
+	mv egglua.o ../
 
-../../../lua.$(MOD_EXT): ../lua.o
-	$(LD) -o ../../../lua.$(MOD_EXT) ../lua.o $(XLIBS) $(MODULE_XLIBS)
-	$(STRIP) ../../../lua.$(MOD_EXT)
+../../../egglua.$(MOD_EXT): ../egglua.o
+	$(LD) -o ../../../egglua.$(MOD_EXT) ../egglua.o $(LIBLUA) $(XLIBS) $(MODULE_XLIBS)
+	$(STRIP) ../../../egglua.$(MOD_EXT)
 
 depend:
-	$(CC) $(CFLAGS) -MM $(srcdir)/lua.c -MT ../lua.o > .depend
+	$(CC) $(CFLAGS) -MM $(srcdir)/egglua.c -MT ../egglua.o > .depend
 
 clean:
 	@rm -f .depend *.o *.$(MOD_EXT) *~
@@ -29,7 +31,7 @@ clean:
 distclean: clean
 
 #safety hash
-../lua.o: ./lua.c ../../../src/mod/module.h ../../../src/main.h \
+../egglua.o: ./egglua.c ../../../src/mod/module.h ../../../src/main.h \
   ../../../config.h ../../../lush.h ../../../src/lang.h \
   ../../../src/eggdrop.h ../../../src/flags.h ../../../src/cmdt.h \
   ../../../src/tclegg.h ../../../src/tclhash.h ../../../src/chan.h \

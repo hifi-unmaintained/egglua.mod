@@ -1,5 +1,5 @@
 /*
- * lua.c -- part of lua.mod
+ * egglua.c -- part of egglua.mod
  *   Lua scripting support for eggdrop 1.6
  *
  * Written by Toni Spets
@@ -23,21 +23,25 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#define MODULE_NAME "lua"
+#define MODULE_NAME "egglua"
 #define MAKING_WOOBIE
 
 #include "src/mod/module.h"
 #include <stdlib.h>
 
+#include <lua5.1/lua.h>
+#include <lua5.1/lualib.h>
+#include <lua5.1/lauxlib.h>
+
 #undef global
 /* Pointer to the eggdrop core function table. Gets initialized in
- * lua_start().
+ * egglua_start().
  */
 static Function *global = NULL;
 
 /* Calculate the memory we keep allocated.
  */
-static int lua_expmem()
+static int egglua_expmem()
 {
   int size = 0;
 
@@ -57,7 +61,7 @@ static int cmd_lua(struct userrec *u, int idx, char *par)
   /* Log the command as soon as you're sure all parameters are valid. */
   putlog(LOG_CMDS, "*", "#%s# lua", dcc[idx].nick);
 
-  dprintf(idx, "WOOBIE!\n");
+  dprintf(idx, "Hello Lua!\n");
   return 0;
 }
 
@@ -67,10 +71,10 @@ static int cmd_lua(struct userrec *u, int idx, char *par)
  *    0 - `.status'
  *    1 - `.status all'  or  `.module lua'
  */
-static void lua_report(int idx, int details)
+static void egglua_report(int idx, int details)
 {
   if (details) {
-    int size = lua_expmem();
+    int size = egglua_expmem();
 
     dprintf(idx, "    Using %d byte%s of memory\n", size,
             (size != 1) ? "s" : "");
@@ -92,7 +96,7 @@ static cmd_t mydcc[] = {
   {NULL,      NULL,  NULL,        NULL}  /* Mark end. */
 };
 
-static char *lua_close()
+static char *egglua_close()
 {
   Context;
   rem_builtins(H_dcc, mydcc);
@@ -103,7 +107,7 @@ static char *lua_close()
 /* Define the prototype here, to avoid warning messages in the
  * lua_table.
  */
-EXPORT_SCOPE char *lua_start();
+EXPORT_SCOPE char *egglua_start();
 
 /* This function table is exported and may be used by other modules and
  * the core.
@@ -112,13 +116,13 @@ EXPORT_SCOPE char *lua_start();
  * they are checked by eggdrop core.
  */
 static Function lua_table[] = {
-  (Function) lua_start,
-  (Function) lua_close,
-  (Function) lua_expmem,
-  (Function) lua_report,
+  (Function) egglua_start,
+  (Function) egglua_close,
+  (Function) egglua_expmem,
+  (Function) egglua_report,
 };
 
-char *lua_start(Function *global_funcs)
+char *egglua_start(Function *global_funcs)
 {
   /* Assign the core function table. After this point you use all normal
    * functions defined in src/mod/modules.h
