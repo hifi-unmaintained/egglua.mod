@@ -31,13 +31,13 @@
 
 #undef global
 /* Pointer to the eggdrop core function table. Gets initialized in
- * woobie_start().
+ * lua_start().
  */
 static Function *global = NULL;
 
 /* Calculate the memory we keep allocated.
  */
-static int woobie_expmem()
+static int lua_expmem()
 {
   int size = 0;
 
@@ -45,7 +45,7 @@ static int woobie_expmem()
   return size;
 }
 
-static int cmd_woobie(struct userrec *u, int idx, char *par)
+static int cmd_lua(struct userrec *u, int idx, char *par)
 {
   /* Define a context.
    *
@@ -55,7 +55,7 @@ static int cmd_woobie(struct userrec *u, int idx, char *par)
   Context;
 
   /* Log the command as soon as you're sure all parameters are valid. */
-  putlog(LOG_CMDS, "*", "#%s# woobie", dcc[idx].nick);
+  putlog(LOG_CMDS, "*", "#%s# lua", dcc[idx].nick);
 
   dprintf(idx, "WOOBIE!\n");
   return 0;
@@ -65,12 +65,12 @@ static int cmd_woobie(struct userrec *u, int idx, char *par)
  *
  * details is either 0 or 1:
  *    0 - `.status'
- *    1 - `.status all'  or  `.module woobie'
+ *    1 - `.status all'  or  `.module lua'
  */
-static void woobie_report(int idx, int details)
+static void lua_report(int idx, int details)
 {
   if (details) {
-    int size = woobie_expmem();
+    int size = lua_expmem();
 
     dprintf(idx, "    Using %d byte%s of memory\n", size,
             (size != 1) ? "s" : "");
@@ -78,8 +78,8 @@ static void woobie_report(int idx, int details)
 }
 
 /* Note: The tcl-name is automatically created if you set it to NULL. In
- *       the example below it would be just "*dcc:woobie". If you specify
- *       "woobie:woobie" it would be "*dcc:woobie:woobie" instead.
+ *       the example below it would be just "*dcc:lua". If you specify
+ *       "lua:lua" it would be "*dcc:lua:lua" instead.
  *               ^----- command name   ^--- table name
  *        ^------------ module name
  *
@@ -88,11 +88,11 @@ static void woobie_report(int idx, int details)
  */
 static cmd_t mydcc[] = {
   /* command  flags  function     tcl-name */
-  {"woobie",  "",    cmd_woobie,  NULL},
+  {".",  "",    cmd_lua,  NULL},
   {NULL,      NULL,  NULL,        NULL}  /* Mark end. */
 };
 
-static char *woobie_close()
+static char *lua_close()
 {
   Context;
   rem_builtins(H_dcc, mydcc);
@@ -101,9 +101,9 @@ static char *woobie_close()
 }
 
 /* Define the prototype here, to avoid warning messages in the
- * woobie_table.
+ * lua_table.
  */
-EXPORT_SCOPE char *woobie_start();
+EXPORT_SCOPE char *lua_start();
 
 /* This function table is exported and may be used by other modules and
  * the core.
@@ -111,14 +111,14 @@ EXPORT_SCOPE char *woobie_start();
  * The first four have to be defined (you may define them as NULL), as
  * they are checked by eggdrop core.
  */
-static Function woobie_table[] = {
-  (Function) woobie_start,
-  (Function) woobie_close,
-  (Function) woobie_expmem,
-  (Function) woobie_report,
+static Function lua_table[] = {
+  (Function) lua_start,
+  (Function) lua_close,
+  (Function) lua_expmem,
+  (Function) lua_report,
 };
 
-char *woobie_start(Function *global_funcs)
+char *lua_start(Function *global_funcs)
 {
   /* Assign the core function table. After this point you use all normal
    * functions defined in src/mod/modules.h
@@ -127,7 +127,7 @@ char *woobie_start(Function *global_funcs)
 
   Context;
   /* Register the module. */
-  module_register(MODULE_NAME, woobie_table, 2, 0);
+  module_register(MODULE_NAME, lua_table, 2, 0);
   /*                                            ^--- minor module version
    *                                         ^------ major module version
    *                           ^-------------------- module function table
@@ -140,7 +140,7 @@ char *woobie_start(Function *global_funcs)
   }
 
   /* Add command table to bind list H_dcc, responsible for dcc commands.
-   * Currently we only add one command, `woobie'.
+   * Currently we only add one command, `lua'.
    */
   add_builtins(H_dcc, mydcc);
   return NULL;
