@@ -15,6 +15,9 @@ AC_CONFIG_AUX_DIR(../../../misc)
 AC_COPYRIGHT([Copyright (C) 2010 Toni Spets])
 
 AC_CHECK_LIB(lua5.1, luaL_newstate, [LIBLUA="-llua5.1"], [])
+if test "x${LIBLUA}" = "x"; then
+  AC_CHECK_LIB(lua, luaL_newstate, [LIBLUA="-llua"], [])
+fi
 AC_CHECK_HEADER(lua.h)
 AC_CHECK_HEADER(lualib.h)
 AC_CHECK_HEADER(lauxlib.h)
