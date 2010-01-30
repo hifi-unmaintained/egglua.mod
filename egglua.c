@@ -34,6 +34,24 @@ static Function egglua_table[] = {
     (Function) egglua_report,
 };
 
+static int tcl_luaload STDVAR
+{
+    char buf[256];
+
+    BADARGS(2, 2, " script-name");
+
+    snprintf(buf, 255, "scripts/%s.lua", argv[1]);
+    lua_getglobal(L, "pm_load");
+    lua_pushstring(L, buf);
+    lua_pcall(L, 1, 0, 0);
+
+    return TCL_OK;
+}
+static tcl_cmds tcl_luacmds[] = {
+    {"luaload",     tcl_luaload},
+    {NULL,          NULL}
+};
+
 char *egglua_start(Function *global_funcs)
 {
     global = global_funcs;
@@ -95,6 +113,8 @@ char *egglua_start(Function *global_funcs)
     if (!(server_funcs = module_depend(MODULE_NAME, "server", 1, 0)))
         return "You need the server module to use the stats module.";
 
+    add_tcl_commands(tcl_luacmds);
+
     add_builtins(H_dcc, lua_dcc);
     add_builtins(H_pubm, lua_pubm);
     add_builtins(H_msgm, lua_msg);
@@ -118,6 +138,8 @@ static char *egglua_close()
     }
 
     lua_close(L);
+
+    rem_tcl_commands(tcl_luacmds);
 
     rem_builtins(H_dcc, lua_dcc);
     rem_builtins(H_pubm, lua_pubm);
