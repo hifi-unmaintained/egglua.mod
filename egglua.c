@@ -98,6 +98,13 @@ char *egglua_start(Function *global_funcs)
     add_builtins(H_dcc, lua_dcc);
     add_builtins(H_pubm, lua_pubm);
     add_builtins(H_msgm, lua_msg);
+
+    add_hook(HOOK_SECONDLY, (Function) lua_hook_secondly);
+    add_hook(HOOK_MINUTELY, (Function) lua_hook_minutely);
+    add_hook(HOOK_5MINUTELY, (Function) lua_hook_5minutely);
+    add_hook(HOOK_HOURLY, (Function) lua_hook_hourly);
+    add_hook(HOOK_DAILY, (Function) lua_hook_daily);
+
     return NULL;
 }
 
@@ -111,9 +118,17 @@ static char *egglua_close()
     }
 
     lua_close(L);
+
     rem_builtins(H_dcc, lua_dcc);
     rem_builtins(H_pubm, lua_pubm);
     rem_builtins(H_msgm, lua_msg);
+
+    del_hook(HOOK_SECONDLY, (Function) lua_hook_secondly);
+    del_hook(HOOK_MINUTELY, (Function) lua_hook_minutely);
+    del_hook(HOOK_5MINUTELY, (Function) lua_hook_5minutely);
+    del_hook(HOOK_HOURLY, (Function) lua_hook_hourly);
+    del_hook(HOOK_DAILY, (Function) lua_hook_daily);
+
     module_undepend(MODULE_NAME);
     return NULL;
 }

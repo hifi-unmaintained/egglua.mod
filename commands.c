@@ -1,3 +1,4 @@
+/* management commands (dcc) */
 static int cmd_lua(struct userrec *u, int idx, char *par)
 {
     Context;
@@ -35,6 +36,44 @@ static int cmd_lua_unload(struct userrec *u, int idx, char *par)
     return 0;
 }
 
+/* hooks */
+static void lua_hook_secondly()
+{
+    Context;
+    lua_getglobal(L, "pm_call");
+    lua_pushstring(L, "hook_secondly");
+    lua_pcall(L, 1, 0, 0);
+}
+static void lua_hook_minutely()
+{
+    Context;
+    lua_getglobal(L, "pm_call");
+    lua_pushstring(L, "hook_minutely");
+    lua_pcall(L, 1, 0, 0);
+}
+static void lua_hook_5minutely()
+{
+    Context;
+    lua_getglobal(L, "pm_call");
+    lua_pushstring(L, "hook_5minutely");
+    lua_pcall(L, 1, 0, 0);
+}
+static void lua_hook_hourly()
+{
+    Context;
+    lua_getglobal(L, "pm_call");
+    lua_pushstring(L, "hook_hourly");
+    lua_pcall(L, 1, 0, 0);
+}
+static void lua_hook_daily()
+{
+    Context;
+    lua_getglobal(L, "pm_call");
+    lua_pushstring(L, "hook_daily");
+    lua_pcall(L, 1, 0, 0);
+}
+
+/* irc messages */
 static int cmd_lua_pubm(char *nick, char *host, char *hand, char *channel, char *msg)
 {
     Context;
