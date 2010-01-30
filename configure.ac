@@ -6,6 +6,8 @@ AC_INIT([Eggdrop Lua Module],[1.0.0],[toni.spets@iki.fi])
 
 # add possible lua header locations
 LUAINC="-I/usr/include -I/usr/include/lua -I/usr/include/lua5.1 -I/usr/local/include"
+LUALD="-lm"
+LDFLAGS="$LDFLAGS $LUALD"
 CFLAGS="$CFLAGS $LUAINC"
 CPPFLAGS="$CPPFLAGS $LUAINC"
 
@@ -47,6 +49,7 @@ fi
 
 AC_SUBST(LIBLUA)
 AC_SUBST(LUAINC)
+AC_SUBST(LUALD)
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

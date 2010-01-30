@@ -1,5 +1,6 @@
 LIBLUA = @LIBLUA@
 LUAINC = @LUAINC@
+LUALD = @LUALD@
 srcdir = .
 
 doofus:
@@ -9,17 +10,17 @@ doofus:
 	@cd ../../../ && make
 
 static: ../egglua.o
-	@echo "$(LIBLUA)" >> ../mod.xlibs
+	@echo "$(LIBLUA) $(LUALD)" >> ../mod.xlibs
 
 modules: ../../../egglua.$(MOD_EXT)
 
-../egglua.o: egglua.h commands.c plugman.c
+../egglua.o: egglua.h commands.c plugman.c exports.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LUAINC) -DMAKING_MODS -c $(srcdir)/egglua.c
 	@rm -f ../egglua.o
 	mv egglua.o ../
 
 ../../../egglua.$(MOD_EXT): ../egglua.o
-	$(LD) -o ../../../egglua.$(MOD_EXT) ../egglua.o $(LIBLUA) $(XLIBS) $(MODULE_XLIBS)
+	$(LD) -o ../../../egglua.$(MOD_EXT) ../egglua.o $(LIBLUA) $(LUALD) $(XLIBS) $(MODULE_XLIBS)
 	$(STRIP) ../../../egglua.$(MOD_EXT)
 
 depend:

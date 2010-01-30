@@ -598,6 +598,7 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+LUALD
 LUAINC
 LIBLUA
 EGREP
@@ -2000,6 +2001,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 # add possible lua header locations
 LUAINC="-I/usr/include -I/usr/include/lua -I/usr/include/lua5.1 -I/usr/local/include"
+LUALD="-lm"
+LDFLAGS="$LDFLAGS $LUALD"
 CFLAGS="$CFLAGS $LUAINC"
 CPPFLAGS="$CPPFLAGS $LUAINC"
 
@@ -3347,6 +3350,7 @@ EOF
 
   fi
 fi
+
 
 
 
