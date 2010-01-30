@@ -56,6 +56,12 @@ char *egglua_start(Function *global_funcs)
     lua_setglobal(L, "DP_STDERR");
     lua_pushnumber(L, DP_MODE);
     lua_setglobal(L, "DP_MODE");
+    lua_pushnumber(L, DP_MODE_NEXT);
+    lua_setglobal(L, "DP_MODE_NEXT");
+    lua_pushnumber(L, DP_SERVER_NEXT);
+    lua_setglobal(L, "DP_SERVER_NEXT");
+    lua_pushnumber(L, DP_HELP_NEXT);
+    lua_setglobal(L, "DP_HELP_NEXT");
 
     /* export some C functions from eggdrop for Lua scripts */
     lua_pushcfunction(L, egglua_dprintf);
@@ -68,7 +74,7 @@ char *egglua_start(Function *global_funcs)
     }
 
     if(lua_pcall(L, 0, 0, 0) != 0) {
-        (char *)lua_tostring(L, -1);
+        (void)(char *)lua_tostring(L, -1);
         return "Lua plugin manager code execution failed";
     }
 

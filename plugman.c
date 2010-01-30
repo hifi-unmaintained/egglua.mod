@@ -102,7 +102,8 @@ static char lua_plugman[] = "" \
 "        pm_load(file) " \
 "end " \
 "" \
-"function pm_call(func, def, ...) " \
+"function pm_call(func, ...) " \
+"        local def = false " \
 "        for i,plugin in pairs(plugins) do " \
 "                local ret = pm_plugin_call(plugin, func, ...) " \
 "                if ret ~= def then " \

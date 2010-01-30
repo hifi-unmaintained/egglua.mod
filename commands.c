@@ -10,27 +10,65 @@ static int cmd_lua(struct userrec *u, int idx, char *par)
 static int cmd_lua_load(struct userrec *u, int idx, char *par)
 {
     Context;
-    dprintf(DP_LOG, "Lua: loading file %s\n", par);
+    char buf[256];
+    char *tmp = strstr(par, " ");
+    if(tmp) *tmp = 0;
+    snprintf(buf, 255, "scripts/%s.lua", par);
+    dprintf(DP_LOG, "Lua: loading file %s", buf);
+    lua_getglobal(L, "pm_load");
+    lua_pushstring(L, buf);
+    lua_pcall(L, 1, 0, 0);
     return 0;
 }
 
 static int cmd_lua_unload(struct userrec *u, int idx, char *par)
 {
     Context;
-    dprintf(DP_LOG, "Lua: unloading file %s\n", par);
+    char buf[256];
+    char *tmp = strstr(par, " ");
+    if(tmp) *tmp = 0;
+    snprintf(buf, 255, "scripts/%s.lua", par);
+    dprintf(DP_LOG, "Lua: unloading file %s", buf);
+    lua_getglobal(L, "pm_unload");
+    lua_pushstring(L, buf);
+    lua_pcall(L, 1, 0, 0);
     return 0;
 }
 
-static int cmd_lua_pubm(char *nick, char *host, char *hand, char *channel, char *text)
+static int cmd_lua_pubm(char *nick, char *host, char *hand, char *channel, char *msg)
 {
     Context;
-    dprintf(DP_LOG, "Lua: pubm %s,%s,%s,%s: %s", nick,host,hand,channel,text);
+    lua_getglobal(L, "pm_call");
+    lua_pushstring(L, "irc_pubm");
+    lua_pushstring(L, nick);
+    lua_pushstring(L, host);
+    lua_pushstring(L, hand);
+    lua_pushstring(L, channel);
+    lua_pushstring(L, msg);
+
+    if(lua_pcall(L, 6, 1, 0) == 0) {
+        /* do we need the return value? */
+        (void)lua_toboolean(L, -1);
+    } else {
+        dprintf(DP_LOG, "Lua: call failed: %s", (char *)lua_tostring(L, -1));
+    }
     return 0;
 }
 
-static int cmd_lua_msg(const char *nick, const char *host, const struct userrec *u, char *text)
+static int cmd_lua_msg(const char *nick, const char *host, const struct userrec *u, char *msg)
 {
     Context;
-    dprintf(DP_LOG, "Lua: msg %s,%s: %s", nick,host,text);
+    lua_getglobal(L, "pm_call");
+    lua_pushstring(L, "irc_msg");
+    lua_pushstring(L, nick);
+    lua_pushstring(L, host);
+    lua_pushstring(L, msg);
+
+    if(lua_pcall(L, 4, 1, 0) == 0) {
+        /* do we need the return value? */
+        (void)lua_toboolean(L, -1);
+    } else {
+        dprintf(DP_LOG, "Lua: call failed: %s", (char *)lua_tostring(L, -1));
+    }
     return 0;
 }
