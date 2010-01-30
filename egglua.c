@@ -61,6 +61,22 @@ char *egglua_start(Function *global_funcs)
     lua_pushcfunction(L, egglua_dprintf);
     lua_setglobal(L, "dprintf");
 
+    /* load plugin manager */
+    if(luaL_loadstring(L, lua_plugman) != 0) {
+        dprintf(DP_LOG, "\nDUMPING PLUGMAN CODE\n---\n%s\n---", lua_plugman);
+        return "Lua plugin manager code load failed";
+    }
+
+    if(lua_pcall(L, 0, 0, 0) != 0) {
+        (char *)lua_tostring(L, -1);
+        return "Lua plugin manager code execution failed";
+    }
+
+    lua_getglobal(L, "pm_init");
+    if(lua_pcall(L, 0, 0, 0) != 0) {
+        return "Lua plugin manager init failed";
+    }
+
     module_register(MODULE_NAME, egglua_table, 0, 1);
 
     if (!module_depend(MODULE_NAME, "eggdrop", 106, 0)) {
@@ -82,6 +98,12 @@ char *egglua_start(Function *global_funcs)
 static char *egglua_close()
 {
     Context;
+
+    lua_getglobal(L, "pm_shutdown");
+    if(lua_pcall(L, 0, 0, 0) != 0) {
+        dprintf(DP_LOG, "Lua plugin manager shutdown failed, but unloading anyway");
+    }
+
     lua_close(L);
     rem_builtins(H_dcc, lua_dcc);
     rem_builtins(H_pubm, lua_pubm);

@@ -13,7 +13,7 @@ static: ../egglua.o
 
 modules: ../../../egglua.$(MOD_EXT)
 
-../egglua.o: egglua.h commands.c
+../egglua.o: egglua.h commands.c plugman.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -DMAKING_MODS -c $(srcdir)/egglua.c
 	@rm -f ../egglua.o
 	mv egglua.o ../

@@ -17,6 +17,7 @@ static Function *global = NULL, *irc_funcs = NULL, *server_funcs = NULL;
 
 #include "commands.c"
 #include "exports.c"
+#include "plugman.c"
 
 EXPORT_SCOPE char *egglua_start();
 static char *egglua_close();
