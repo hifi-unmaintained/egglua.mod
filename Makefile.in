@@ -28,6 +28,7 @@ clean:
 	@rm -f .depend *.o *.$(MOD_EXT) *~
 
 distclean: clean
+	@rm -f Makefile config.cache config.log config.status config.h
 
 #safety hash
 ../egglua.o: ./egglua.c ./commands.c ../../../src/mod/module.h ../../../src/main.h \
