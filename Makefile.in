@@ -1,6 +1,5 @@
-LIBLUA = -llua5.1
+LIBLUA = @LIBLUA@
 srcdir = .
-
 
 doofus:
 	@echo ""
