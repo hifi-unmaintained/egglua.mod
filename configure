@@ -598,6 +598,7 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+LUAINC
 LIBLUA
 EGREP
 GREP
@@ -1997,6 +1998,11 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+# add possible lua header locations
+LUAINC="-I/usr/include -I/usr/include/lua -I/usr/include/lua5.1 -I/usr/local/include"
+CFLAGS="$CFLAGS $LUAINC"
+CPPFLAGS="$CPPFLAGS $LUAINC"
+
 
 ac_aux_dir=
 for ac_dir in ../../../misc "$srcdir"/../../../misc; do
@@ -3254,20 +3260,20 @@ fi
 done
 
 
-ac_fn_c_check_header_mongrel "$LINENO" "lua5.1/lua.h" "ac_cv_header_lua5_1_lua_h" "$ac_includes_default"
-if test "x$ac_cv_header_lua5_1_lua_h" = x""yes; then :
+ac_fn_c_check_header_mongrel "$LINENO" "lua.h" "ac_cv_header_lua_h" "$ac_includes_default"
+if test "x$ac_cv_header_lua_h" = x""yes; then :
 
 fi
 
 
-ac_fn_c_check_header_mongrel "$LINENO" "lua5.1/lualib.h" "ac_cv_header_lua5_1_lualib_h" "$ac_includes_default"
-if test "x$ac_cv_header_lua5_1_lualib_h" = x""yes; then :
+ac_fn_c_check_header_mongrel "$LINENO" "lualib.h" "ac_cv_header_lualib_h" "$ac_includes_default"
+if test "x$ac_cv_header_lualib_h" = x""yes; then :
 
 fi
 
 
-ac_fn_c_check_header_mongrel "$LINENO" "lua5.1/lauxlib.h" "ac_cv_header_lua5_1_lauxlib_h" "$ac_includes_default"
-if test "x$ac_cv_header_lua5_1_lauxlib_h" = x""yes; then :
+ac_fn_c_check_header_mongrel "$LINENO" "lauxlib.h" "ac_cv_header_lauxlib_h" "$ac_includes_default"
+if test "x$ac_cv_header_lauxlib_h" = x""yes; then :
 
 fi
 
@@ -3286,7 +3292,7 @@ EOF
   ${srcdir}/../../../misc/modconfig -q --top_srcdir=${srcdir}/../../.. --bindir=../../.. del egglua
 
 else
-  if  test "${ac_cv_header_lua5_1_lua_h}" != "yes"  ||  test "${ac_cv_header_lua5_1_lualib_h}" != "yes"  ||  test "${ac_cv_header_lua5_1_lauxlib_h}" != "yes" ; then
+  if  test "${ac_cv_header_lua_h}" != "yes"  ||  test "${ac_cv_header_lualib_h}" != "yes"  ||  test "${ac_cv_header_lauxlib_h}" != "yes" ; then
     cat >&2 <<EOF
 configure: warning:
 
@@ -3299,6 +3305,7 @@ EOF
 
   fi
 fi
+
 
 
 

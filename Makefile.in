@@ -1,4 +1,5 @@
 LIBLUA = @LIBLUA@
+LUAINC = @LUAINC@
 srcdir = .
 
 doofus:
@@ -13,7 +14,7 @@ static: ../egglua.o
 modules: ../../../egglua.$(MOD_EXT)
 
 ../egglua.o: egglua.h commands.c plugman.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -DMAKING_MODS -c $(srcdir)/egglua.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LUAINC) -DMAKING_MODS -c $(srcdir)/egglua.c
 	@rm -f ../egglua.o
 	mv egglua.o ../
 
@@ -22,7 +23,7 @@ modules: ../../../egglua.$(MOD_EXT)
 	$(STRIP) ../../../egglua.$(MOD_EXT)
 
 depend:
-	$(CC) $(CFLAGS) -MM $(srcdir)/egglua.c -MT ../egglua.o > .depend
+	$(CC) $(CFLAGS) $(LUAINC) -MM $(srcdir)/egglua.c -MT ../egglua.o > .depend
 
 clean:
 	@rm -f .depend *.o *.$(MOD_EXT) *~
