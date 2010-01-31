@@ -27,6 +27,7 @@ static void egglua_report(int idx, int details);
 static cmd_t lua_dcc[] = {
     {"luaload",     "",     cmd_lua_load,   NULL},
     {"luaunload",   "",     cmd_lua_unload, NULL},
+    {"luareload",   "",     cmd_lua_reload, NULL},
     {"lua",         "",     cmd_lua,        NULL},
     {NULL,          NULL,   NULL,           NULL}
 };

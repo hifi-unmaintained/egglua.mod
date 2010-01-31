@@ -1,12 +1,5 @@
 /* Lua plugin manager in a C string for inclusion */
 static char lua_plugman[] = "" \
-/* -- for debugging */
-"if dprintf == nil then " \
-"    dprintf = function(...) " \
-"        print(...) " \
-"    end " \
-"end " \
-"" \
 "local function copy_table(orig) " \
 "    local new = {} " \
 "" \
@@ -24,7 +17,7 @@ static char lua_plugman[] = "" \
 "" \
 "        success, err = pcall(plugin.env[func], ...) " \
 "        if not success then" \
-"                dprintf(DP_LOG, \"PlugMan: failed to call '\"..func..\"' in '\"..plugin.file..\"': \"..err) " \
+"                putlog(\"egglua: failed to call '\"..func..\"' in '\"..plugin.file..\"': \"..err) " \
 "                if not plugin.unloading then " \
 "                        pm_unload(plugin.file) " \
 "                end " \
@@ -39,7 +32,6 @@ static char lua_plugman[] = "" \
 "local plugins = {} " \
 "" \
 "function pm_init() " \
-"        dprintf(DP_LOG, \"Lua PlugMan Loaded\") " \
 "        globals = copy_table(_G) " \
 "        globals.pm_init = nil " \
 "        globals.pm_shutdown = nil " \
@@ -50,11 +42,9 @@ static char lua_plugman[] = "" \
 "end " \
 "" \
 "function pm_shutdown() " \
-"        dprintf(DP_LOG, \"PlugMan: shutdown in progress...\") " \
 "        for i,plugin in pairs(plugins) do " \
 "                pm_unload(plugin.file) " \
 "        end " \
-"        dprintf(DP_LOG, \"PlugMan: all plugins unloaded!\") " \
 "end " \
 "" \
 "function pm_load(file) " \
@@ -65,7 +55,7 @@ static char lua_plugman[] = "" \
 "" \
 "        chunk, err = loadfile(plugin.file) " \
 "        if chunk == nil then " \
-"                dprintf(DP_LOG, \"PlugMan: failed to load file \"..plugin.file..\": \"..tostring(err)) " \
+"                putlog(\"egglua: \"..tostring(err)) " \
 "                return false " \
 "        end " \
 "" \
@@ -74,12 +64,12 @@ static char lua_plugman[] = "" \
 "        success, err = pcall(chunk) " \
 "" \
 "        if not success then " \
-"                dprintf(DP_LOG, \"PlugMan: failed to compile file \"..plugin.file..\": \"..tostring(err)) " \
+"                putlog(\"egglua: \"..tostring(err)) " \
 "                return false " \
 "        end " \
 "" \
-"        dprintf(DP_LOG, \"PlugMan: loaded plugin \"..plugin.file) " \
-"        pm_plugin_call(plugin, 'plug_load') " \
+"        putlog(\"egglua: loaded plugin \"..plugin.file) " \
+"        pm_plugin_call(plugin, 'load') " \
 "" \
 "        table.insert(plugins, plugin) " \
 "        return true " \
@@ -88,8 +78,9 @@ static char lua_plugman[] = "" \
 "function pm_unload(file) " \
 "        for i,plugin in pairs(plugins) do " \
 "                if plugin.file == file then " \
-"                        pm_plugin_call(plugin, 'plug_unload') " \
+"                        pm_plugin_call(plugin, 'unload') " \
 "                        plugins[i] = nil " \
+"                        putlog(\"egglua: unloaded plugin \"..plugin.file) " \
 "                        return true " \
 "                end " \
 "        end " \
@@ -112,14 +103,5 @@ static char lua_plugman[] = "" \
 "        end " \
 "" \
 "        return def " \
-"end " \
-"" \
-/* -- functions called from eggdrop" */
-"function irc_mpub() " \
-"    return pm_call(\"irc_mpub\", false) " \
-"end " \
-"" \
-"function irc_msg() " \
-"    return pm_call(\"irc_msg\", false) " \
 "end " \
 ;

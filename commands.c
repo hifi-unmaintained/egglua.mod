@@ -2,9 +2,10 @@
 static int cmd_lua(struct userrec *u, int idx, char *par)
 {
     Context;
-    dprintf(idx, "Usage:\n", par);
+    dprintf(idx, "egglua module commands:\n", par);
     dprintf(idx, " luaload <script>\n", par);
     dprintf(idx, " luaunload <script>\n", par);
+    dprintf(idx, " luareload <script>\n", par);
     return 0;
 }
 
@@ -15,7 +16,7 @@ static int cmd_lua_load(struct userrec *u, int idx, char *par)
     char *tmp = strstr(par, " ");
     if(tmp) *tmp = 0;
     snprintf(buf, 255, "scripts/%s.lua", par);
-    dprintf(DP_LOG, "Lua: loading file %s", buf);
+    dprintf(DP_LOG, "egglua: loading file %s", buf);
     lua_getglobal(L, "pm_load");
     lua_pushstring(L, buf);
     lua_pcall(L, 1, 0, 0);
@@ -29,8 +30,22 @@ static int cmd_lua_unload(struct userrec *u, int idx, char *par)
     char *tmp = strstr(par, " ");
     if(tmp) *tmp = 0;
     snprintf(buf, 255, "scripts/%s.lua", par);
-    dprintf(DP_LOG, "Lua: unloading file %s", buf);
+    dprintf(DP_LOG, "egglua: unloading file %s", buf);
     lua_getglobal(L, "pm_unload");
+    lua_pushstring(L, buf);
+    lua_pcall(L, 1, 0, 0);
+    return 0;
+}
+
+static int cmd_lua_reload(struct userrec *u, int idx, char *par)
+{
+    Context;
+    char buf[256];
+    char *tmp = strstr(par, " ");
+    if(tmp) *tmp = 0;
+    snprintf(buf, 255, "scripts/%s.lua", par);
+    dprintf(DP_LOG, "egglua: reloading file %s", buf);
+    lua_getglobal(L, "pm_reload");
     lua_pushstring(L, buf);
     lua_pcall(L, 1, 0, 0);
     return 0;
@@ -78,7 +93,7 @@ static int cmd_lua_pubm(char *nick, char *host, char *hand, char *channel, char 
 {
     Context;
     lua_getglobal(L, "pm_call");
-    lua_pushstring(L, "irc_pubm");
+    lua_pushstring(L, "msg_pub");
     lua_pushstring(L, nick);
     lua_pushstring(L, host);
     lua_pushstring(L, hand);
@@ -89,7 +104,7 @@ static int cmd_lua_pubm(char *nick, char *host, char *hand, char *channel, char 
         /* do we need the return value? */
         (void)lua_toboolean(L, -1);
     } else {
-        dprintf(DP_LOG, "Lua: call failed: %s", (char *)lua_tostring(L, -1));
+        dprintf(DP_LOG, "egglua: call failed: %s", (char *)lua_tostring(L, -1));
     }
     return 0;
 }
@@ -98,7 +113,7 @@ static int cmd_lua_msg(const char *nick, const char *host, const struct userrec 
 {
     Context;
     lua_getglobal(L, "pm_call");
-    lua_pushstring(L, "irc_msg");
+    lua_pushstring(L, "msg_priv");
     lua_pushstring(L, nick);
     lua_pushstring(L, host);
     lua_pushstring(L, msg);
@@ -107,7 +122,7 @@ static int cmd_lua_msg(const char *nick, const char *host, const struct userrec 
         /* do we need the return value? */
         (void)lua_toboolean(L, -1);
     } else {
-        dprintf(DP_LOG, "Lua: call failed: %s", (char *)lua_tostring(L, -1));
+        dprintf(DP_LOG, "egglua: call failed: %s", (char *)lua_tostring(L, -1));
     }
     return 0;
 }

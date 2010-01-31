@@ -61,29 +61,19 @@ char *egglua_start(Function *global_funcs)
     L = luaL_newstate();
     luaL_openlibs(L);
     
-    /* register constants */
-    lua_pushnumber(L, DP_STDOUT);
-    lua_setglobal(L, "DP_STDOUT");
-    lua_pushnumber(L, DP_LOG);
-    lua_setglobal(L, "DP_LOG");
-    lua_pushnumber(L, DP_SERVER);
-    lua_setglobal(L, "DP_SERVER");
-    lua_pushnumber(L, DP_HELP);
-    lua_setglobal(L, "DP_HELP");
-    lua_pushnumber(L, DP_STDERR);
-    lua_setglobal(L, "DP_STDERR");
-    lua_pushnumber(L, DP_MODE);
-    lua_setglobal(L, "DP_MODE");
-    lua_pushnumber(L, DP_MODE_NEXT);
-    lua_setglobal(L, "DP_MODE_NEXT");
-    lua_pushnumber(L, DP_SERVER_NEXT);
-    lua_setglobal(L, "DP_SERVER_NEXT");
-    lua_pushnumber(L, DP_HELP_NEXT);
-    lua_setglobal(L, "DP_HELP_NEXT");
-
-    /* export some C functions from eggdrop for Lua scripts */
-    lua_pushcfunction(L, egglua_dprintf);
-    lua_setglobal(L, "dprintf");
+    /* output functions */
+    lua_pushcfunction(L, egglua_putserv);
+    lua_setglobal(L, "putserv");
+    lua_pushcfunction(L, egglua_puthelp);
+    lua_setglobal(L, "puthelp");
+    lua_pushcfunction(L, egglua_putquick);
+    lua_setglobal(L, "putquick");
+    lua_pushcfunction(L, egglua_putlog);
+    lua_setglobal(L, "putlog");
+    lua_pushcfunction(L, egglua_putcmdlog);
+    lua_setglobal(L, "putcmdlog");
+    lua_pushcfunction(L, egglua_putxferlog);
+    lua_setglobal(L, "putxferlog");
 
     /* load plugin manager */
     if(luaL_loadstring(L, lua_plugman) != 0) {
@@ -109,9 +99,9 @@ char *egglua_start(Function *global_funcs)
     }
 
     if (!(irc_funcs = module_depend(MODULE_NAME, "irc", 1, 0)))
-        return "You need the irc module to use the stats module.";
+        return "You need the irc module to use the egglua module.";
     if (!(server_funcs = module_depend(MODULE_NAME, "server", 1, 0)))
-        return "You need the server module to use the stats module.";
+        return "You need the server module to use the egglua module.";
 
     add_tcl_commands(tcl_luacmds);
 
