@@ -69,7 +69,7 @@ static char lua_plugman[] = "" \
 "        end " \
 "" \
 "        putlog(\"egglua: loaded plugin \"..plugin.file) " \
-"        pm_plugin_call(plugin, 'load') " \
+"        pm_plugin_call(plugin, 'onload') " \
 "" \
 "        table.insert(plugins, plugin) " \
 "        return true " \
@@ -78,7 +78,8 @@ static char lua_plugman[] = "" \
 "function pm_unload(file) " \
 "        for i,plugin in pairs(plugins) do " \
 "                if plugin.file == file then " \
-"                        pm_plugin_call(plugin, 'unload') " \
+"                        plugin.unloading = true " \
+"                        pm_plugin_call(plugin, 'onunload') " \
 "                        plugins[i] = nil " \
 "                        putlog(\"egglua: unloaded plugin \"..plugin.file) " \
 "                        return true " \
