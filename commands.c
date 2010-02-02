@@ -89,7 +89,7 @@ static void lua_hook_daily()
 }
 
 /* irc messages */
-static int cmd_lua_pubm(char *nick, char *host, char *hand, char *channel, char *msg)
+static int lua_msg_pub(char *nick, char *host, char *hand, char *channel, char *msg)
 {
     Context;
     lua_getglobal(L, "pm_call");
@@ -109,7 +109,7 @@ static int cmd_lua_pubm(char *nick, char *host, char *hand, char *channel, char 
     return 0;
 }
 
-static int cmd_lua_msg(const char *nick, const char *host, const struct userrec *u, char *msg)
+static int lua_msg_priv(const char *nick, const char *host, const struct userrec *u, char *msg)
 {
     Context;
     lua_getglobal(L, "pm_call");

@@ -33,11 +33,11 @@ static cmd_t lua_dcc[] = {
 };
 
 static cmd_t lua_pubm[] = {
-    {"*",           "",     cmd_lua_pubm,   NULL},
+    {"*",           "",     lua_msg_pub,    NULL},
     {NULL,          NULL,   NULL,           NULL}
 };
 
 static cmd_t lua_msg[] = {
-    {"*",           "",     cmd_lua_msg,    NULL},
+    {"*",           "",     lua_msg_priv,   NULL},
     {NULL,          NULL,   NULL,           NULL}
 };
