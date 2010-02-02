@@ -74,6 +74,10 @@ char *egglua_start(Function *global_funcs)
     lua_setglobal(L, "putcmdlog");
     lua_pushcfunction(L, egglua_putxferlog);
     lua_setglobal(L, "putxferlog");
+    lua_pushcfunction(L, egglua_chattr);
+    lua_setglobal(L, "chattr");
+    lua_pushcfunction(L, egglua_matchattr);
+    lua_setglobal(L, "matchattr");
 
     /* load plugin manager */
     if(luaL_loadstring(L, lua_plugman) != 0) {
