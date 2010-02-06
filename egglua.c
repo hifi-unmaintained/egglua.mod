@@ -74,10 +74,14 @@ char *egglua_start(Function *global_funcs)
     lua_setglobal(L, "putcmdlog");
     lua_pushcfunction(L, egglua_putxferlog);
     lua_setglobal(L, "putxferlog");
+    lua_pushcfunction(L, egglua_botnick);
+    lua_setglobal(L, "botnick");
     lua_pushcfunction(L, egglua_chattr);
     lua_setglobal(L, "chattr");
     lua_pushcfunction(L, egglua_matchattr);
     lua_setglobal(L, "matchattr");
+    lua_pushcfunction(L, egglua_onchan);
+    lua_setglobal(L, "onchan");
 
     /* load plugin manager */
     if(luaL_loadstring(L, lua_plugman) != 0) {

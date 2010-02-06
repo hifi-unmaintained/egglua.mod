@@ -64,6 +64,13 @@ static int egglua_putxferlog(lua_State *L)
   return 0;
 }
 
+/* utility functions to replace TCL globals */
+static int egglua_botnick(lua_State *L)
+{
+    lua_pushstring(L, botname);
+    return 1;
+}
+
 int chan_sanity_check(int, int);
 /* converted from tcl_attr(), all credits to the Eggdrop team */
 static int egglua_chattr(lua_State *L)
@@ -187,5 +194,39 @@ static int egglua_matchattr(lua_State *L)
     }
   }
   lua_pushboolean(L, ok);
+  return 1;
+}
+
+/* source: irc.mod: tcl_onchan */
+static int egglua_onchan(lua_State *L)
+{
+  struct chanset_t *chan, *thechan = NULL;
+
+  char *nick = (char *)luaL_checkstring(L, 1);
+  char *channel = (char *)lua_tostring(L, 2);
+
+  int argc = 3;
+  if(channel == NULL)
+      argc = 2;
+
+  if (argc > 2) {
+    chan = findchan_by_dname(channel);
+    thechan = chan;
+    if (!thechan) {
+      lua_pushnil(L);
+      lua_pushstring(L, "illegal channel");
+      return 2;
+    }
+  } else
+    chan = chanset;
+
+  while (chan && (thechan == NULL || thechan == chan)) {
+    if (ismember(chan, nick)) {
+      lua_pushboolean(L, 1);
+      return 1;
+    }
+    chan = chan->next;
+  }
+  lua_pushboolean(L, 0);
   return 1;
 }
