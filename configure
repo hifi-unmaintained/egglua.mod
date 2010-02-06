@@ -1999,9 +1999,11 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-# add possible lua header locations
-LUAINC="-I/usr/include -I/usr/include/lua -I/usr/include/lua5.1 -I/usr/local/include"
-LUALD="-lm"
+# add possible lua header locations, pkg-config would do this
+# automagically but no other module use it so don't depend on it
+# unneccessarily, this should be fine for most systems
+LUAINC="-I/usr/include/lua5.1 -I/usr/local/include"
+LUALD="-L/usr/local/lib -lm"
 LDFLAGS="$LDFLAGS $LUALD"
 CFLAGS="$CFLAGS $LUAINC"
 CPPFLAGS="$CPPFLAGS $LUAINC"
@@ -2825,48 +2827,7 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for luaL_newstate in -llua5.1" >&5
-$as_echo_n "checking for luaL_newstate in -llua5.1... " >&6; }
-if test "${ac_cv_lib_lua5_1_luaL_newstate+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-llua5.1  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char luaL_newstate ();
-int
-main ()
-{
-return luaL_newstate ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_lua5_1_luaL_newstate=yes
-else
-  ac_cv_lib_lua5_1_luaL_newstate=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_lua5_1_luaL_newstate" >&5
-$as_echo "$ac_cv_lib_lua5_1_luaL_newstate" >&6; }
-if test "x$ac_cv_lib_lua5_1_luaL_newstate" = x""yes; then :
-  LIBLUA="-llua5.1"
-fi
-
-if test "x${LIBLUA}" = "x"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for luaL_newstate in -llua" >&5
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for luaL_newstate in -llua" >&5
 $as_echo_n "checking for luaL_newstate in -llua... " >&6; }
 if test "${ac_cv_lib_lua_luaL_newstate+set}" = set; then :
   $as_echo_n "(cached) " >&6
@@ -2904,6 +2865,47 @@ fi
 $as_echo "$ac_cv_lib_lua_luaL_newstate" >&6; }
 if test "x$ac_cv_lib_lua_luaL_newstate" = x""yes; then :
   LIBLUA="-llua"
+fi
+
+if test "x${LIBLUA}" = "x"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for luaL_newstate in -llua5.1" >&5
+$as_echo_n "checking for luaL_newstate in -llua5.1... " >&6; }
+if test "${ac_cv_lib_lua5_1_luaL_newstate+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-llua5.1  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char luaL_newstate ();
+int
+main ()
+{
+return luaL_newstate ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_lua5_1_luaL_newstate=yes
+else
+  ac_cv_lib_lua5_1_luaL_newstate=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_lua5_1_luaL_newstate" >&5
+$as_echo "$ac_cv_lib_lua5_1_luaL_newstate" >&6; }
+if test "x$ac_cv_lib_lua5_1_luaL_newstate" = x""yes; then :
+  LIBLUA="-llua5.1"
 fi
 
 fi

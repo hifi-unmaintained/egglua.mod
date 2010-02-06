@@ -4,9 +4,11 @@ sinclude(../eggmod.m4)
 
 AC_INIT([Eggdrop Lua Module],[1.0.0],[toni.spets@iki.fi])
 
-# add possible lua header locations
-LUAINC="-I/usr/include -I/usr/include/lua -I/usr/include/lua5.1 -I/usr/local/include"
-LUALD="-lm"
+# add possible lua header locations, pkg-config would do this
+# automagically but no other module use it so don't depend on it
+# unneccessarily, this should be fine for most systems
+LUAINC="-I/usr/include/lua5.1 -I/usr/local/include"
+LUALD="-L/usr/local/lib -lm"
 LDFLAGS="$LDFLAGS $LUALD"
 CFLAGS="$CFLAGS $LUAINC"
 CPPFLAGS="$CPPFLAGS $LUAINC"
@@ -16,9 +18,9 @@ AC_CONFIG_AUX_DIR(../../../misc)
 
 AC_COPYRIGHT([Copyright (C) 2010 Toni Spets])
 
-AC_CHECK_LIB(lua5.1, luaL_newstate, [LIBLUA="-llua5.1"], [])
+AC_CHECK_LIB(lua, luaL_newstate, [LIBLUA="-llua"], [])
 if test "x${LIBLUA}" = "x"; then
-  AC_CHECK_LIB(lua, luaL_newstate, [LIBLUA="-llua"], [])
+  AC_CHECK_LIB(lua5.1, luaL_newstate, [LIBLUA="-llua5.1"], [])
 fi
 AC_CHECK_HEADER(lua.h)
 AC_CHECK_HEADER(lualib.h)
