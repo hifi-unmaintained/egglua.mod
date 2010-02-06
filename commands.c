@@ -55,35 +55,35 @@ static int cmd_lua_reload(struct userrec *u, int idx, char *par)
 static void lua_hook_secondly()
 {
     Context;
-    lua_getglobal(L, "pm_call");
+    lua_getglobal(L, "pm_call_nonblock");
     lua_pushstring(L, "hook_secondly");
     lua_pcall(L, 1, 0, 0);
 }
 static void lua_hook_minutely()
 {
     Context;
-    lua_getglobal(L, "pm_call");
+    lua_getglobal(L, "pm_call_nonblock");
     lua_pushstring(L, "hook_minutely");
     lua_pcall(L, 1, 0, 0);
 }
 static void lua_hook_5minutely()
 {
     Context;
-    lua_getglobal(L, "pm_call");
+    lua_getglobal(L, "pm_call_nonblock");
     lua_pushstring(L, "hook_5minutely");
     lua_pcall(L, 1, 0, 0);
 }
 static void lua_hook_hourly()
 {
     Context;
-    lua_getglobal(L, "pm_call");
+    lua_getglobal(L, "pm_call_nonblock");
     lua_pushstring(L, "hook_hourly");
     lua_pcall(L, 1, 0, 0);
 }
 static void lua_hook_daily()
 {
     Context;
-    lua_getglobal(L, "pm_call");
+    lua_getglobal(L, "pm_call_nonblock");
     lua_pushstring(L, "hook_daily");
     lua_pcall(L, 1, 0, 0);
 }

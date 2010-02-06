@@ -105,4 +105,11 @@ static char lua_plugman[] = "" \
 "" \
 "        return def " \
 "end " \
+"" \
+"function pm_call_nonblock(func, ...) " \
+"        for i,plugin in pairs(plugins) do " \
+"                pm_plugin_call(plugin, func, ...) " \
+"        end " \
+"end " \
+"" \
 ;
