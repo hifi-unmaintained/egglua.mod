@@ -12,7 +12,7 @@ static char lua_plugman[] = "" \
 "" \
 "local function pm_plugin_call(plugin, func, ...) " \
 "        if type(plugin.env[func]) ~= 'function' then " \
-"                return " \
+"                return nil " \
 "        end " \
 "" \
 "        success, err = pcall(plugin.env[func], ...) " \
@@ -22,7 +22,7 @@ static char lua_plugman[] = "" \
 "                        pm_unload(plugin.file) " \
 "                end " \
 "" \
-"                return false " \
+"                return nil " \
 "        end " \
 "" \
 "        return err " \
@@ -98,7 +98,7 @@ static char lua_plugman[] = "" \
 "        local def = false " \
 "        for i,plugin in pairs(plugins) do " \
 "                local ret = pm_plugin_call(plugin, func, ...) " \
-"                if ret ~= def then " \
+"                if ret ~= def and ret ~= nil then " \
 "                        return ret " \
 "                end " \
 "        end " \
