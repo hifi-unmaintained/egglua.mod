@@ -87,6 +87,70 @@ static void lua_hook_daily()
     lua_pushstring(L, "hook_daily");
     lua_pcall(L, 1, 0, 0);
 }
+static int lua_hook_kick(char *nick, char *uhost, char *hand, char *channel, char *victim, char *reason)
+{
+    Context;
+    lua_getglobal(L, "pm_call_nonblock");
+    lua_pushstring(L, "hook_kick");
+    lua_pushstring(L, nick);
+    lua_pushstring(L, uhost);
+    lua_pushstring(L, hand);
+    lua_pushstring(L, channel);
+    lua_pushstring(L, victim);
+    lua_pushstring(L, reason);
+    lua_pcall(L, 7, 0, 0);
+    return 0;
+}
+static int lua_hook_nick(char *nick, char *uhost, char *hand, char *channel, char *newnick)
+{
+    Context;
+    lua_getglobal(L, "pm_call_nonblock");
+    lua_pushstring(L, "hook_nick");
+    lua_pushstring(L, nick);
+    lua_pushstring(L, uhost);
+    lua_pushstring(L, hand);
+    lua_pushstring(L, channel);
+    lua_pushstring(L, newnick);
+    lua_pcall(L, 6, 0, 0);
+    return 0;
+}
+static int lua_hook_join(char *nick, char *uhost, char *hand, char *channel)
+{
+    Context;
+    lua_getglobal(L, "pm_call_nonblock");
+    lua_pushstring(L, "hook_join");
+    lua_pushstring(L, nick);
+    lua_pushstring(L, uhost);
+    lua_pushstring(L, hand);
+    lua_pushstring(L, channel);
+    lua_pcall(L, 5, 0, 0);
+    return 0;
+}
+static int lua_hook_part(char *nick, char *uhost, char *hand, char *channel)
+{
+    Context;
+    lua_getglobal(L, "pm_call_nonblock");
+    lua_pushstring(L, "hook_part");
+    lua_pushstring(L, nick);
+    lua_pushstring(L, uhost);
+    lua_pushstring(L, hand);
+    lua_pushstring(L, channel);
+    lua_pcall(L, 5, 0, 0);
+    return 0;
+}
+static int lua_hook_sign(char *nick, char *uhost, char *hand, char *channel, char *reason)
+{
+    Context;
+    lua_getglobal(L, "pm_call_nonblock");
+    lua_pushstring(L, "hook_sign");
+    lua_pushstring(L, nick);
+    lua_pushstring(L, uhost);
+    lua_pushstring(L, hand);
+    lua_pushstring(L, channel);
+    lua_pushstring(L, reason);
+    lua_pcall(L, 6, 0, 0);
+    return 0;
+}
 
 /* irc messages */
 static int lua_msg_pub(char *nick, char *host, char *hand, char *channel, char *msg)

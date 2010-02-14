@@ -41,3 +41,23 @@ static cmd_t lua_msg[] = {
     {"*",           "",     lua_msg_priv,   NULL},
     {NULL,          NULL,   NULL,           NULL}
 };
+static cmd_t lua_kick[] = {
+    {"*",           "",     lua_hook_kick,  NULL},
+    {NULL,          NULL,   NULL,           NULL}
+};
+static cmd_t lua_nick[] = {
+    {"*",           "",     lua_hook_nick,  NULL},
+    {NULL,          NULL,   NULL,           NULL}
+};
+static cmd_t lua_join[] = {
+    {"*",           "",     lua_hook_join,  NULL},
+    {NULL,          NULL,   NULL,           NULL}
+};
+static cmd_t lua_part[] = {
+    {"*",           "",     lua_hook_part,  NULL},
+    {NULL,          NULL,   NULL,           NULL}
+};
+static cmd_t lua_sign[] = {
+    {"*",           "",     lua_hook_sign,  NULL},
+    {NULL,          NULL,   NULL,           NULL}
+};

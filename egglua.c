@@ -116,6 +116,12 @@ char *egglua_start(Function *global_funcs)
     add_builtins(H_dcc, lua_dcc);
     add_builtins(H_pubm, lua_pubm);
     add_builtins(H_msgm, lua_msg);
+    add_builtins(H_kick, lua_kick);
+    add_builtins(H_nick, lua_nick);
+    add_builtins(H_join, lua_join);
+    add_builtins(H_nkch, lua_nick);
+    add_builtins(H_sign, lua_sign);
+    add_builtins(H_part, lua_part);
 
     add_hook(HOOK_SECONDLY, (Function) lua_hook_secondly);
     add_hook(HOOK_MINUTELY, (Function) lua_hook_minutely);
@@ -142,6 +148,12 @@ static char *egglua_close()
     rem_builtins(H_dcc, lua_dcc);
     rem_builtins(H_pubm, lua_pubm);
     rem_builtins(H_msgm, lua_msg);
+    rem_builtins(H_kick, lua_kick);
+    rem_builtins(H_nick, lua_nick);
+    rem_builtins(H_join, lua_join);
+    rem_builtins(H_nkch, lua_nick);
+    rem_builtins(H_sign, lua_sign);
+    rem_builtins(H_part, lua_part);
 
     del_hook(HOOK_SECONDLY, (Function) lua_hook_secondly);
     del_hook(HOOK_MINUTELY, (Function) lua_hook_minutely);
