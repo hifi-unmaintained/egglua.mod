@@ -230,3 +230,105 @@ static int egglua_onchan(lua_State *L)
   lua_pushboolean(L, 0);
   return 1;
 }
+
+static int egglua_isop(lua_State *L)
+{
+  struct chanset_t *chan, *thechan = NULL;
+  memberlist *mx;
+
+  char *nick = (char *)luaL_checkstring(L, 1);
+  char *channel = (char *)lua_tostring(L, 2);
+
+  int argc = 3;
+  if(channel == NULL)
+      argc = 2;
+
+  if (argc > 2) {
+    chan = findchan_by_dname(channel);
+    thechan = chan;
+    if (!thechan) {
+      lua_pushnil(L);
+      lua_pushstring(L, "illegal channel");
+      return 2;
+    }
+  } else
+    chan = chanset;
+
+  while (chan && (thechan == NULL || thechan == chan)) {
+    if ((mx = ismember(chan, nick)) && chan_hasop(mx)) {
+        lua_pushboolean(L, 1);
+      return 1;
+    }
+    chan = chan->next;
+  }
+  lua_pushboolean(L, 0);
+  return 1;
+}
+
+static int egglua_ishalfop(lua_State *L)
+{
+  struct chanset_t *chan, *thechan = NULL;
+  memberlist *mx;
+
+  char *nick = (char *)luaL_checkstring(L, 1);
+  char *channel = (char *)lua_tostring(L, 2);
+
+  int argc = 3;
+  if(channel == NULL)
+      argc = 2;
+
+  if (argc > 2) {
+    chan = findchan_by_dname(channel);
+    thechan = chan;
+    if (!thechan) {
+      lua_pushnil(L);
+      lua_pushstring(L, "illegal channel");
+      return 2;
+    }
+  } else
+    chan = chanset;
+
+  while (chan && (thechan == NULL || thechan == chan)) {
+    if ((mx = ismember(chan, nick)) && chan_hashalfop(mx)) {
+        lua_pushboolean(L, 1);
+      return 1;
+    }
+    chan = chan->next;
+  }
+  lua_pushboolean(L, 0);
+  return 1;
+}
+
+static int egglua_isvoice(lua_State *L)
+{
+  struct chanset_t *chan, *thechan = NULL;
+  memberlist *mx;
+
+  char *nick = (char *)luaL_checkstring(L, 1);
+  char *channel = (char *)lua_tostring(L, 2);
+
+  int argc = 3;
+  if(channel == NULL)
+      argc = 2;
+
+  if (argc > 2) {
+    chan = findchan_by_dname(channel);
+    thechan = chan;
+    if (!thechan) {
+      lua_pushnil(L);
+      lua_pushstring(L, "illegal channel");
+      return 2;
+    }
+  } else
+    chan = chanset;
+
+  while (chan && (thechan == NULL || thechan == chan)) {
+    if ((mx = ismember(chan, nick)) && chan_hasvoice(mx)) {
+        lua_pushboolean(L, 1);
+      return 1;
+    }
+    chan = chan->next;
+  }
+  lua_pushboolean(L, 0);
+  return 1;
+}

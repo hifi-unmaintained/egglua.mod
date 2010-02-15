@@ -82,6 +82,12 @@ char *egglua_start(Function *global_funcs)
     lua_setglobal(L, "matchattr");
     lua_pushcfunction(L, egglua_onchan);
     lua_setglobal(L, "onchan");
+    lua_pushcfunction(L, egglua_isop);
+    lua_setglobal(L, "isop");
+    lua_pushcfunction(L, egglua_ishalfop);
+    lua_setglobal(L, "ishalfop");
+    lua_pushcfunction(L, egglua_isvoice);
+    lua_setglobal(L, "isvoice");
 
     /* load plugin manager */
     if(luaL_loadstring(L, lua_plugman) != 0) {
