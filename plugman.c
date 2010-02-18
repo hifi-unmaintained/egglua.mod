@@ -95,21 +95,8 @@ static char lua_plugman[] = "" \
 "end " \
 "" \
 "function pm_call(func, ...) " \
-"        local def = false " \
-"        for i,plugin in pairs(plugins) do " \
-"                local ret = pm_plugin_call(plugin, func, ...) " \
-"                if ret ~= def and ret ~= nil then " \
-"                        return ret " \
-"                end " \
-"        end " \
-"" \
-"        return def " \
-"end " \
-"" \
-"function pm_call_nonblock(func, ...) " \
 "        for i,plugin in pairs(plugins) do " \
 "                pm_plugin_call(plugin, func, ...) " \
 "        end " \
 "end " \
-"" \
 ;

@@ -105,7 +105,7 @@ char *egglua_start(Function *global_funcs)
         return "Lua plugin manager init failed";
     }
 
-    module_register(MODULE_NAME, egglua_table, 0, 1);
+    module_register(MODULE_NAME, egglua_table, 0, 999);
 
     if (!module_depend(MODULE_NAME, "eggdrop", 106, 0)) {
         module_undepend(MODULE_NAME);
