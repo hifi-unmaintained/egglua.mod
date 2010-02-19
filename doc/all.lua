@@ -192,6 +192,14 @@ reference =
             title = "Callbacks (hooks)",
             topics = {
                 {
+                    func = "onload",
+                    desc = "called when the script is first loaded"
+                },
+                {
+                    func = "onunload",
+                    desc = "called when the script is unloaded, expect it to be the last call"
+                },
+                {
                     func = "hook_secondly",
                     desc = "called every second"
                 },
